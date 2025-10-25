@@ -806,7 +806,7 @@ PROCESSED_PATH = '../santosh_lab/shared/KagoziA/wavelets/xresnet_baseline/'
 OUTPUT_PATH = '../santosh_lab/shared/KagoziA/wavelets/xresnet_baseline/outputs/'
 BATCH_SIZE = 16  # ✅ FIXED: Reduced for Swin
 ACCUMULATION_STEPS = 2  # ✅ FIXED: Effective batch = 32
-EPOCHS = 100  # ✅ FIXED: More epochs for transformers
+EPOCHS = 500  # ✅ FIXED: More epochs for transformers
 LR = 0.001
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 NUM_WORKERS = 1
@@ -1596,8 +1596,8 @@ def main():
         # Baseline CNN models with Focal loss
         {'mode': 'scalogram', 'model': 'CWT2DCNN', 'name': 'CWT2DCNN-Scalo-Focal', 'loss': 'focal'},
         # {'mode': 'phasogram', 'model': 'CWT2DCNN', 'name': 'CWT2DCNN-Phaso-Focal', 'loss': 'focal'},
-        # {'mode': 'fusion', 'model': 'CWT2DCNN6Channel', 'name': 'CWT2DCNN-Fusion-Focal', 'loss': 'focal'},
-        # {'mode': 'both', 'model': 'DualStreamCNN', 'name': 'DualStreamCNN-Focal', 'loss': 'focal'},
+        {'mode': 'fusion', 'model': 'CWT2DCNN6Channel', 'name': 'CWT2DCNN-Fusion-Focal', 'loss': 'focal'},
+        {'mode': 'both', 'model': 'DualStreamCNN', 'name': 'DualStreamCNN-Focal', 'loss': 'focal'},
     ]
     
     # Train all models

@@ -803,13 +803,14 @@ import seaborn as sns
 # ============================================================================
 
 PROCESSED_PATH = '../santosh_lab/shared/KagoziA/wavelets/xresnet_baseline/'
+OUTPUT_PATH = '../santosh_lab/shared/KagoziA/wavelets/xresnet_baseline/outputs/'
 BATCH_SIZE = 16  # ✅ FIXED: Reduced for Swin
 ACCUMULATION_STEPS = 2  # ✅ FIXED: Effective batch = 32
 EPOCHS = 100  # ✅ FIXED: More epochs for transformers
 LR = 0.001
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 NUM_WORKERS = 1
-
+os.makedirs(OUTPUT_PATH, exist_ok=True)
 print("="*80)
 print("STEP 3: TRAIN FIXED MODELS ON RGB COMPOSITE CWT")
 print("="*80)
@@ -1520,14 +1521,14 @@ def train_model(config, metadata, device):
                 'val_auc': best_val_auc,
                 'thresholds': best_thresholds,
                 'config': config
-            }, os.path.join(PROCESSED_PATH, f"best_{config['name']}.pth"))
+            }, os.path.join(OUTPUT_PATH, f"best_{config['name']}.pth"))
             print(f"✓ Saved best model (AUC: {best_val_auc:.4f})")
         
         scheduler.step()
     
     # Test with best model
     print(f"\nTesting {config['name']}...")
-    checkpoint = torch.load(os.path.join(PROCESSED_PATH, f"best_{config['name']}.pth"))
+    checkpoint = torch.load(os.path.join(OUTPUT_PATH, f"best_{config['name']}.pth"))
     model.load_state_dict(checkpoint['model_state_dict'])
     
     test_loss, test_preds, test_labels = validate(model, test_loader, criterion, device, is_dual)
@@ -1543,7 +1544,7 @@ def train_model(config, metadata, device):
     try:
         plot_confusion_matrix_all_classes(
             test_labels, test_pred_binary, metadata['classes'],
-            save_path=os.path.join(PROCESSED_PATH, f"confusion_{config['name']}.png")
+            save_path=os.path.join(OUTPUT_PATH, f"confusion_{config['name']}.png")
         )
         print(f"✓ Confusion matrix saved")
     except Exception as e:
@@ -1558,7 +1559,7 @@ def train_model(config, metadata, device):
         'history': history
     }
     
-    with open(os.path.join(PROCESSED_PATH, f"results_{config['name']}.json"), 'w') as f:
+    with open(os.path.join(OUTPUT_PATH, f"results_{config['name']}.json"), 'w') as f:
         json.dump(results, f, indent=2)
     
     return results
@@ -1625,7 +1626,7 @@ def main():
               f"{metrics['f1_macro']:.4f}   | {metrics['f_beta_macro']:.4f}")
     
     # Save final results
-    with open(os.path.join(PROCESSED_PATH, 'final_results.json'), 'w') as f:
+    with open(os.path.join(OUTPUT_PATH, 'final_results.json'), 'w') as f:
         json.dump(all_results, f, indent=2)
     
     # Find best model

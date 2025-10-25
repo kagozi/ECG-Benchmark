@@ -806,7 +806,7 @@ PROCESSED_PATH = '../santosh_lab/shared/KagoziA/wavelets/xresnet_baseline/'
 OUTPUT_PATH = '../santosh_lab/shared/KagoziA/wavelets/xresnet_baseline/outputs/'
 BATCH_SIZE = 16  # ✅ FIXED: Reduced for Swin
 ACCUMULATION_STEPS = 2  # ✅ FIXED: Effective batch = 32
-EPOCHS = 50  # ✅ FIXED: More epochs for transformers
+EPOCHS = 65  # ✅ FIXED: More epochs for transformers
 LR = 0.001
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 NUM_WORKERS = 1
